@@ -6,23 +6,52 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
-    <div id="app"></div>
-<script>
-    const model = {};
+<div id="app"></div>
 
-    getTodos();
-    async function getTodos() {
-        const response = await axios.get('/todo');
-        model.todos = response.data;
-        updateView();    }
+    <script>
+        const model = {};
 
-    function updateView() {
-        let html = '';
-        for (let todo of model.todos) {
-            html += `<li>${todo.text}</li>`;
+        getTodos();
+        async function getTodos() {
+            const response = await axios.get('/todo');
+            model.todos = response.data;
+            updateView();
         }
-        document.getElementById('app').innerHTML = html;
-    }
-</script>
+
+        function updateView() {
+            let html = `
+                    <input type="text" oninput="model.text=this.value" value="${model.text||''}"/>
+                    <button onclick="addTodo()">legg til todo</button>
+                    <hr/>
+                `;
+            for (let todo of model.todos) {
+                let doneText = '';
+                if (todo.doneDate != null) {
+                    doneText = 'fullført '
+                        + new Date(todo.doneDate).toLocaleDateString();
+                }
+                html += `
+                    <li>
+                        ${todo.text}
+                        ${doneText}
+                        <button onclick="markAsDone('${todo.id}')">✓</button>
+                    </li>`;
+            }
+            document.getElementById('app').innerHTML = html;
+        }
+
+        async function markAsDone(id) {
+            const paramObj = { id: id };
+            const response = await axios.put('/todo', paramObj);
+            getTodos();
+        }
+
+        async function addTodo() {
+            const paramObj = { text: model.text };
+            model.text = '';
+            const response = await axios.post('/todo', paramObj);
+            getTodos();
+        }
+    </script>
 </body>
 </html>

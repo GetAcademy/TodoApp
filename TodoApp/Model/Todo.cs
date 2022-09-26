@@ -6,9 +6,13 @@
         public string Text { get; set; }
         public DateTime? DoneDate { get; set; }
 
-        public Todo(string text)
+        public Todo()
         {
             Id = Guid.NewGuid();
+        }
+
+        public Todo(string text) : this()
+        {
             Text = text;
         }
     }

@@ -1,5 +1,5 @@
 using System.Text.Json;
-using System.Text.Json.Serialization;
+using TodoApp;
 using TodoApp.Model;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,6 +25,7 @@ app.MapGet("/todo", () =>
 {
     return todos;
 });
+//app.MapGet("/todo", TodoService.GetAll);
 app.MapPut("/todo", async (Todo todo) =>
 {
     var todoInList = todos.SingleOrDefault(t => t.Id == todo.Id);

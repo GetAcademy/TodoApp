@@ -1,0 +1,28 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <div id="app"></div>
+<script>
+    const model = {};
+
+    getTodos();
+    async function getTodos() {
+        const response = await axios.get('/todo');
+        model.todos = response.data;
+        updateView();    }
+
+    function updateView() {
+        let html = '';
+        for (let todo of model.todos) {
+            html += `<li>${todo.text}</li>`;
+        }
+        document.getElementById('app').innerHTML = html;
+    }
+</script>
+</body>
+</html>
